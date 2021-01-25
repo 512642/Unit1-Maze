@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
@@ -14,6 +12,10 @@ public class PlayerMove : MonoBehaviour
     public Transform spawn;
     bool crouching = false;
     private Animator anim;
+    float xv = 3;
+    float yv = 3;
+
+
 
     void start()
     {
@@ -21,18 +23,20 @@ public class PlayerMove : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
-    void Update()
+     // Update is called once per frame
+    void FixedUpdate()
     {
-        endGame();
-        crouch();
-        uncrouch();
+        EndGame();
+        SlowWalk();
+        NormalWalk();
+        Walking();
+
     }
 
     void OnCollisionEnter2D(Collision2D col)
     {
 
-       Debug.Log("collided with " + col.gameObject.tag);
+        Debug.Log("collided with " + col.gameObject.tag);
 
 
         if (col.collider.tag == "Walls")
@@ -42,45 +46,81 @@ public class PlayerMove : MonoBehaviour
             // If your intention is to decrease the lifecounter when the player hits a wall, add your code here.       
             LifeCounter--;
             Debug.Log(LifeCounter);
+            
 
-            System.Threading.Thread.Sleep(1000);// delays movement for 1s.
+
         }
     }
 
-    void uncrouch()
+    void NormalWalk()
     {
         if (Input.GetMouseButtonUp(0))
         {
+            print("uncrouching");
             crouching = false;
-            if(crouching == false)
+            if (crouching == false)
             {
-                speed = saveSpeed;
+                yv = 0;
+                xv = 0;
+                rb.velocity = new Vector2(xv, yv);
             }
 
         }
     }
-    void crouch()
+    void SlowWalk()
     {
-    if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
+            print("crouching");
             crouching = true;
             if (crouching == true)
             {
-                speed = crouchSpeed;
+                yv = -+1;
+                xv = -+1;
+
+                rb.velocity = new Vector2(xv, yv);
             }
         }
     }
 
-    
-    
-    void endGame()
-    {
-        if (LifeCounter == 0)
+        void Walking()
         {
-            Debug.Log("EndGame");
-            Application.Quit();
-            UnityEditor.EditorApplication.isPlaying = false;
-        }
-    }
 
-}
+            float xv = 0;
+            float yv = 0;
+
+        if (Input.GetKey("w"))
+            {
+                yv = 3;
+            }
+            if (Input.GetKey("a"))
+            {
+                xv = -3;
+
+            }
+            if (Input.GetKey("s"))
+            {
+                yv = -3;
+            }
+            if (Input.GetKey("d"))
+            {
+                xv = 3;
+            }
+
+
+            // set the x and y velocity
+            rb.velocity = new Vector2(xv, yv);
+
+        }
+
+        void EndGame()
+        {
+            if (LifeCounter == 0)
+            {
+                Debug.Log("EndGame");
+                Application.Quit();
+                UnityEditor.EditorApplication.isPlaying = false;
+            }
+        }
+
+    }
