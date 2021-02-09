@@ -4,15 +4,17 @@ public class PlayerMove : MonoBehaviour
 {
 
     public float speed = 3.0f;
-    int LifeCounter = 3; // this can be an int as you are only using whole numbers
+    public int LifeCounter = 3; // this can be an int as you are only using whole numbers
     //public bool crouched = false;
     public Rigidbody2D rb;
     public Transform spawn;
-    bool crouching = false;
+    bool Sprinting = false;
+    public Transform DestroyText;
+    public bool Destroying = false;
 
 
 
-    void start()
+    void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     }
@@ -21,7 +23,7 @@ public class PlayerMove : MonoBehaviour
     void FixedUpdate()
     {
         EndGame();
-        SlowWalk();
+        Sprint();
         Walking();
 
     }
@@ -29,45 +31,50 @@ public class PlayerMove : MonoBehaviour
     void OnCollisionEnter2D(Collision2D col)
     {
 
-        Debug.Log("collided with " + col.gameObject.tag);
 
-
-        if (col.collider.tag == "Walls")
+        if (col.collider.tag == "Chaser" )
         {
             transform.position = spawn.position;
             // If your intention is to decrease the lifecounter when the player hits a wall, add your code here.       
             LifeCounter--;
             Debug.Log(LifeCounter);
             
-
-
+        }
+        if (col.collider.name == "DestroyText")
+        {
+            Destroying = true;
+        }
+        if (Destroying == true)
+        {
+            GameObject.Destroy(DestroyText);
+            Destroying = false;
         }
     }
-    void SlowWalk()
+    void Sprint()
     {
-        if (Input.GetKey("up"))
+        if (Input.GetKey("space"))
         {
-            crouching = true;
-            if (crouching == true)
+            Sprinting = true;
+            if (Sprinting == true)
             {
                 float yv = 0;
                 float xv = 0;
                 if (Input.GetKey("w"))
                 {
-                    yv = 1;
+                    yv = 5;
                 }
                 if (Input.GetKey("a"))
                 {
-                    xv = -1;
+                    xv = -5;
 
                 }
                 if (Input.GetKey("s"))
                 {
-                    yv = -1;
+                    yv = -5;
                 }
                 if (Input.GetKey("d"))
                 {
-                    xv = 1;
+                    xv = 5;
                 }
                 rb.velocity = new Vector2(xv, yv);
             }
@@ -99,12 +106,14 @@ public class PlayerMove : MonoBehaviour
              }
                 // set the x and y velocity
              rb.velocity = new Vector2(xv, yv);
-        SlowWalk();
+        Sprint();
 
 
     }
 
-        void EndGame()
+
+
+    void EndGame()
         {
             if (LifeCounter == 0)
             {
