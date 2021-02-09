@@ -7,6 +7,7 @@ public class DestroyTextScript : MonoBehaviour
     public GameObject Player;
     public GameObject DestroyText;
     public GameObject Canvas;
+    bool destroyed = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,7 +20,9 @@ public class DestroyTextScript : MonoBehaviour
 
         if (col.collider.name == ("Player"))
         {
-            Destroy(Canvas);
+            destroyed = true;
+
+            Destroy(DestroyText);
         }
     }
 
@@ -27,9 +30,10 @@ public class DestroyTextScript : MonoBehaviour
             // Update is called once per frame
             void FixedUpdate()
     {
-        if (GetComponent<PlayerMove>().Destroying ==true)
+        if (destroyed == true)
         {
-            GameObject.Destroy(Canvas);
+            GameObject.Destroy(Canvas);            
+            
         }
      
     }
