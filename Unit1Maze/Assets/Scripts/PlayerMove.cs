@@ -40,15 +40,6 @@ public class PlayerMove : MonoBehaviour
             Debug.Log(LifeCounter);
             
         }
-        if (col.collider.name == "DestroyText")
-        {
-            Destroying = true;
-        }
-        if (Destroying == true)
-        {
-            GameObject.Destroy(DestroyText);
-            Destroying = false;
-        }
     }
     void Sprint()
     {
@@ -119,7 +110,6 @@ public class PlayerMove : MonoBehaviour
             {
                 Debug.Log("EndGame");
                 Application.Quit();
-                UnityEditor.EditorApplication.isPlaying = false;
             }
         }
 

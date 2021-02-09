@@ -23543,9 +23543,9 @@ PrefabInstance:
 
         Objective:
 
-        escape the maze
-        without getting touched by the moving obsicle. hitting one resets you and
-        takes off a life.'
+        Escape the maze
+        without getting touched by the moving obsicle. Hitting one resets you and
+        takes off a life. You have 3 lives.'
       objectReference: {fileID: 0}
     - target: {fileID: 5844033824201124576, guid: e0a527ac64f6bb342ba912cf2bd47dd1, type: 3}
       propertyPath: m_LocalPosition.x
